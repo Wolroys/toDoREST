@@ -22,11 +22,14 @@ repositories {
     mavenCentral()
 }
 
+apply from: 'version.gradle'
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${versions.springdoc}"
+    implementation "org.modelmapper:modelmapper:${versions.modelmapper}"
 
 //    compileOnly 'org.projectlombok:lombok'
 

@@ -1,0 +1,6 @@
+ext {
+    versions = [
+            'springdoc': '2.2.0',
+            'modelmapper': '3.1.1'
+    ]
+}
