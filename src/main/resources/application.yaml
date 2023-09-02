@@ -4,3 +4,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/toDo
     username: postgres
     password: 9567
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true

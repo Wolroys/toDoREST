@@ -1,11 +1,13 @@
 package com.wolroys.todorest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -26,7 +28,13 @@ public class User {
 
     private String password;
 
-//    @Builder.Default
+    @JsonIgnore
+    @Builder.Default
     @OneToMany(mappedBy = "user")
-    private List<Note> notes;
+    private List<Note> notes = new ArrayList<>();
+
+    @JsonIgnore
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks = new ArrayList<>();
 }
