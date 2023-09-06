@@ -3,10 +3,12 @@ package com.wolroys.todorest.controller;
 import com.wolroys.todorest.dto.UserCreateEditDto;
 import com.wolroys.todorest.dto.UserReadDto;
 import com.wolroys.todorest.service.UserService;
+import com.wolroys.todorest.validation.exception.UsernameExistError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.wolroys.todorest.entity.User;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,6 +35,8 @@ public class UserController {
     @PostMapping(value = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserReadDto create(@RequestBody UserCreateEditDto user){
+        if (userService.checkingUser(user.getUsername()))
+            throw new UsernameExistError("This username is already taken");
         return userService.create(user);
     }
 
@@ -48,4 +52,5 @@ public class UserController {
         if (!userService.delete(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
+
 }

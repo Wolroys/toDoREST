@@ -1,10 +1,18 @@
 package com.wolroys.todorest.dto;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 
 public class TaskDto {
+    @NotNull
     String title;
+    @NotNull
     String description;
+
+    @NotNull
+            @Future
     LocalDate dueDate;
 
     public TaskDto() {

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,9 +19,10 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping("/v1/api/tasks/{id}")
-    public List<TaskDto> findAll(@PathVariable int id){
-        return taskService.findAll(id);
+    @GetMapping("/v1/api/tasks/")
+    public List<TaskDto> findAll(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return taskService.findAll(userDetails);
     }
 
     @GetMapping("/v1/api/task/{id}")
@@ -30,13 +32,13 @@ public class TaskController {
     }
 
     @PostMapping("/v1/api/task")
-    public TaskDto create(@RequestBody TaskDto taskDto){
+    public TaskDto create(@RequestBody @Validated TaskDto taskDto){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return taskService.create(taskDto, userDetails.getUsername());
     }
 
     @PatchMapping("/v1/api/task/{id}/update")
-    public TaskDto update(@PathVariable int id, TaskDto dto){
+    public TaskDto update(@PathVariable int id, @Validated TaskDto dto){
         return taskService.update(id, dto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

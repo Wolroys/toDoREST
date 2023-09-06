@@ -24,7 +24,8 @@ public class NoteService {
     private final NoteMapper mapper;
     private final UserRepository userRepository;
 
-    public List<NoteDto> findAll(int userId){
+    public List<NoteDto> findAll(UserDetails userDetails){
+        int userId = userRepository.findByUsername(userDetails.getUsername()).get().getId();
         return noteRepository.findAllByUserId(userId)
                 .stream().map(mapper::toDto)
                 .toList();

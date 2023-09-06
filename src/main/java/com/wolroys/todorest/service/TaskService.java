@@ -9,6 +9,7 @@ import com.wolroys.todorest.mapper.TaskMapper;
 import com.wolroys.todorest.repository.TaskRepository;
 import com.wolroys.todorest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,8 @@ public class TaskService {
     private final TaskMapper mapper;
     private final UserRepository userRepository;
 
-    public List<TaskDto> findAll(int userId){
+    public List<TaskDto> findAll(UserDetails userDetails){
+        int userId = userRepository.findByUsername(userDetails.getUsername()).get().getId();
         return taskRepository.findAllByUserId(userId)
                 .stream().map(mapper::toDto)
                 .toList();
@@ -40,7 +42,7 @@ public class TaskService {
         Task task = Optional.of(taskDto)
                 .map(mapper::toEntity).orElse(null);
 
-        task.setUser(userRepository.findByUsername(username).orElse(null))
+        task.setUser(userRepository.findByUsername(username).orElse(null));
 
         return Optional.of(task)
                 .map(taskRepository::saveAndFlush)

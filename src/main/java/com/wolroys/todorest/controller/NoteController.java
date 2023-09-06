@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,9 +19,10 @@ public class NoteController {
 
     private final NoteService noteService;
 
-    @GetMapping("/v1/api/notes/{id}")
-    public List<NoteDto> findAll(@PathVariable int id){
-        return noteService.findAll(id);
+    @GetMapping("/v1/api/notes")
+    public List<NoteDto> findAll(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return noteService.findAll(userDetails);
     }
 
     @GetMapping("/v1/api/note/{id}")
@@ -30,7 +32,7 @@ public class NoteController {
     }
 
     @PostMapping("/v1/api/note")
-    public ResponseEntity<NoteDto> create(@RequestBody NoteDto noteDto){
+    public ResponseEntity<NoteDto> create(@RequestBody @Validated NoteDto noteDto){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.status(HttpStatus.CREATED).body(noteService.create(noteDto, userDetails.getUsername()));
     }

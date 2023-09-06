@@ -86,4 +86,8 @@ public class UserService implements UserDetailsService {
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }
+
+    public boolean checkingUser(String username){
+        return userRepository.existsByUsername(username);
+    }
 }
