@@ -4,6 +4,8 @@ import com.wolroys.todorest.dto.TaskDto;
 import com.wolroys.todorest.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,7 +31,8 @@ public class TaskController {
 
     @PostMapping("/v1/api/task")
     public TaskDto create(@RequestBody TaskDto taskDto){
-        return taskService.create(taskDto);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return taskService.create(taskDto, userDetails.getUsername());
     }
 
     @PatchMapping("/v1/api/task/{id}/update")

@@ -2,9 +2,13 @@ package com.wolroys.todorest.service;
 
 import com.wolroys.todorest.dto.NoteDto;
 import com.wolroys.todorest.entity.Note;
+import com.wolroys.todorest.entity.User;
 import com.wolroys.todorest.mapper.NoteMapper;
 import com.wolroys.todorest.repository.NoteRepository;
+import com.wolroys.todorest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +22,7 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
     private final NoteMapper mapper;
+    private final UserRepository userRepository;
 
     public List<NoteDto> findAll(int userId){
         return noteRepository.findAllByUserId(userId)
@@ -31,9 +36,11 @@ public class NoteService {
     }
 
     @Transactional
-    public NoteDto create(NoteDto noteDto){
-        return Optional.of(noteDto)
-                .map(mapper::toEntity)
+    public NoteDto create(NoteDto noteDto, String username){
+        Note note = Optional.of(noteDto)
+                .map(mapper::toEntity).orElse(null);
+        note.setUser(userRepository.findByUsername(username).orElse(null));
+        return Optional.of(note)
                 .map(noteRepository::saveAndFlush)
                 .map(mapper::toDto)
                 .orElseThrow();

@@ -4,6 +4,9 @@ import com.wolroys.todorest.dto.NoteDto;
 import com.wolroys.todorest.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,8 +30,9 @@ public class NoteController {
     }
 
     @PostMapping("/v1/api/note")
-    public NoteDto create(@RequestBody NoteDto noteDto){
-        return noteService.create(noteDto);
+    public ResponseEntity<NoteDto> create(@RequestBody NoteDto noteDto){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.status(HttpStatus.CREATED).body(noteService.create(noteDto, userDetails.getUsername()));
     }
 
     @PatchMapping("/v1/api/note/{id}/update")

@@ -7,6 +7,7 @@ import com.wolroys.todorest.entity.Task;
 import com.wolroys.todorest.mapper.NoteMapper;
 import com.wolroys.todorest.mapper.TaskMapper;
 import com.wolroys.todorest.repository.TaskRepository;
+import com.wolroys.todorest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper mapper;
+    private final UserRepository userRepository;
 
     public List<TaskDto> findAll(int userId){
         return taskRepository.findAllByUserId(userId)
@@ -34,9 +36,13 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDto create(TaskDto taskDto){
-        return Optional.of(taskDto)
-                .map(mapper::toEntity)
+    public TaskDto create(TaskDto taskDto, String username){
+        Task task = Optional.of(taskDto)
+                .map(mapper::toEntity).orElse(null);
+
+        task.setUser(userRepository.findByUsername(username).orElse(null))
+
+        return Optional.of(task)
                 .map(taskRepository::saveAndFlush)
                 .map(mapper::toDto)
                 .orElseThrow();
