@@ -10,3 +10,13 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+  application:
+    name: TodoApp
+    version: 1.0
+    description: "My task Todo application is where you can register, due to which the necessary
+     records and notes are created.
+     Technologies used Spring Data JPA, Spring Security, Swagger, Spring boot, Spring AOP,
+      Spring Validation, ModelMapper, Liquibase"
+  contact:
+    name: Aleksey Paslenov
+    email: alekseypaslenov@gmail.com

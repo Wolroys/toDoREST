@@ -1,18 +1,26 @@
 package com.wolroys.todorest.dto;
 
+import com.wolroys.todorest.validation.annotation.NotNullAndBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
+@Getter
 public class TaskDto {
-    @NotNull
+    @NotNullAndBlank(message = "The title field must be filled in")
+            @Schema(description = "title of task")
     String title;
-    @NotNull
+
+    @NotNullAndBlank(message = "The description field must be filled in")
+            @Schema(description = "description of task")
     String description;
 
-    @NotNull
-            @Future
+    @NotNull(message = "You must specify the deadline date")
+            @Future(message = "Incorrect date")
+            @Schema(description = "deadline date")
     LocalDate dueDate;
 
     public TaskDto() {
@@ -24,24 +32,12 @@ public class TaskDto {
         this.dueDate = dueDate;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
     }
 
     public void setDueDate(LocalDate dueDate) {

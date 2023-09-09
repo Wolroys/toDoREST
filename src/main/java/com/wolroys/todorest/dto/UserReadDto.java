@@ -1,12 +1,18 @@
 package com.wolroys.todorest.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 
 public class UserReadDto {
+    @Schema(description = "user's id")
     int id;
+
+    @Schema(description = "user's name")
     String username;
+
+    @Schema(description = "user's email")
     String email;
 
     public UserReadDto() {
