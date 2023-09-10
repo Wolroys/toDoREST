@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/toDo
+    url: jdbc:postgresql://postgres:5432/todoApi
     username: postgres
-    password: 9567
+    password: pass
 
   jpa:
     properties:
